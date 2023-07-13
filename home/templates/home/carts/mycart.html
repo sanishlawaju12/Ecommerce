@@ -1,0 +1,108 @@
+{% extends 'home/base.html' %}
+
+{% block title %} My Cart{% endblock%}
+
+{% block main%}
+<!--
+<div class="container">
+    <div class="panel panel-primary">
+      
+      <table class="table table-hover" id="dev-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Image</th>
+            {% comment %} <th>Size</th> {% endcomment %}
+            <th>Price</th>
+            <th>Description</th>
+            <th>Remove From Cart</th>
+  
+          </tr>
+        </thead>
+        {% for p in products %}
+    {% if p %}
+  
+        <tr>
+          <td> {{p.name}}</td>
+          <td> <img src="{{p.image.url}}" alt="Profile Pic" height="40px" width="40px" /></td>
+          {% comment %} <td> {{p.size_variant}}</td> {% endcomment %}
+          <td>{{p.price}}</td>
+          <td>{{p.description}}</td>
+
+          <td><a href="{% url 'home:remove-from-cart' p.id  %}"><i class="bx bx-trash"></i></a></td>
+  
+        </tr>
+        {%else%}
+        <br><br><br>
+        <h1>no products</h1>
+        {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <br><br><br>
+  <div style="text-align: center;  ">
+    <div class="total" style=" height:50px; ">
+      Total = {{total}}</div>
+    {% comment %} <a href=""><button class="button" ><span>Check out </span></button></a> {% endcomment %}
+  </div>
+  
+  
+  <br><br><br><br><br> -->
+
+
+
+
+  
+  <div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Items in my cart</h4><hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Product</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{cp.product.name}}</td>
+                        <td>{{cp.rate}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal}}</td>
+                        <td>
+                            <a href="{% url 'home:managecart' cp.id %}?action=inc" class="btn btn-primary"> + </a>
+                            <a href="{% url 'home:managecart' cp.id %}?action=dcr" class="btn btn-warning"> - </a>
+                            <a href="{% url 'home:managecart' cp.id %}?action=rmv" class="btn btn-danger"> x </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Total</th>
+                        <th>Rs. {{cart.total}}</th>
+                        {% if cart.cartproduct_set.all %}
+                        <th><a href="{% url 'home:emptycart' %}">Empty Cart</a></th>
+                        {% endif %} 
+                    </tr>
+                    {% if cart.cartproduct_set.all %}
+                    <tr>
+                        <th><a class="btn btn-info" href="{% url 'home:checkout' %}"> Checkout </a></th>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

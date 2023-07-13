@@ -1,0 +1,123 @@
+{% extends 'home/home.html' %}
+
+{% block title %} Customer Registration{%endblock%}
+
+{% block main %}
+<style>
+    .errorlist{
+        color: red;
+    }
+    {% comment %} .form-container{
+        background-color:white;
+        border-radius:20px;
+        box-sizing:border-box;
+        height:500px;
+        width:320px;
+        align-items:center;
+    }
+    .form-welcome{
+        color:#eee;
+        font-family:sans-serif;
+        font-size:36px;
+        font-weight:600px;
+        margin-top:30px;
+    } {% endcomment %}
+
+</style>
+
+{% comment %}
+<div class="form-container">
+    <div class="form-welcome">
+        
+   
+    
+            <form action="" method="POST" class="main-form">
+                {% csrf_token %}
+                <div class="line-design">{{form.as_p}}</div>
+                <button class="btn btn-primary">Register as a customer</button>
+            </form>
+        </div>
+    
+</div>
+{% endcomment %}
+<div class="container-regform">
+    <input type="checkbox" id="check">
+    <div class="registration form">
+		{% comment %} {% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<h6 id="messages" class="success_message py-3 px-1 my-2 text-center">{{message}}</h6>
+			{% endif %}
+
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR%}
+			<h6 id="messages" class="error_message py-3 px-1 my-2 text-center">{{message}}{{form.errors}}</h6>
+
+			{% endif %}
+		{% endfor %} {% endcomment %}
+        <header>Signup Form</header>
+    <form action="" method="POST">
+        {% csrf_token %}
+        
+        {% comment %} {{form.as_p}} {% endcomment %}
+
+
+{% comment %}         
+            <input type="email" class="form-control" value="{{ email }}" name="email" placeholder="Email">
+            {% if errors.email %}
+            <p class="error">{{ errors.email }}</p>
+            {% endif %}
+        
+        
+            <input type="text" class="form-control" value="{{ Password }}" name="Password" placeholder="Password">
+            {% if errors.Password %}
+            <p class="error">{{ errors.Password }}</p>
+            {% endif %}
+        
+
+        
+            <input type="text" class="form-control" value="{{ username }}" name="username" placeholder="Username">
+            {% if errors.username %}
+            <p class="error">{{ errors.username }}</p>
+            {% endif %}
+       
+            <input type="text" class="form-control" value="{{ contact }}" name="contact" placeholder="Contact">
+            {% if errors.contact %}
+            <p class="error">{{ errors.contact }}</p>
+            {% endif %}
+        
+            <input type="text" class="form-control" value="{{ address }}" name="address" placeholder="Address">
+            {% if errors.address %}
+            <p class="error">{{ errors.address }}</p>
+            {% endif %} {% endcomment %}
+            {% comment %} {% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<h6 id="messages" class="success_message py-3 px-1 my-2 text-center">{{message}}</h6>
+			{% endif %}
+
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR%}
+			<h6 id="messages" class="error_message py-3 px-1 my-2 text-center">{{message}}{{form.errors}}</h6>
+
+			{% endif %}
+			{% endfor %} {% endcomment %}
+            {{form.as_p}}
+        
+       
+
+
+
+
+
+
+        <button class="button">Register</button>
+     
+    </form>
+    
+    <div class="signup">
+      <span class="signup">Already have an account?
+       <label for="check"><a href="{% url 'accounts:customerlogin' %}">Login</a></label>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+{%endblock%}

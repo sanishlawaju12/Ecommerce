@@ -1,0 +1,68 @@
+
+{% extends 'dashboard/base.html' %}
+
+{% block main %}
+                <!-- Page Heading -->
+               
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Category</h6>
+                        <div class="float-right">
+                            <a href="{% url 'dashboard:categories-create' %}" class = "btn btn-primary">
+                                <i class="fa fa-plus"></i>&nbsp; Add Category
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Title</th>
+                                        <th>Slug</th>
+                                        <th>Image</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ object.title }}</td>
+                                        <td>{{ object.slug }}</td>
+                                        <td>
+                                        {% if object.image %}
+                                        <img src="{{ object.image.url }}" alt="" width="100px" height="100px">
+                                        {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'dashboard:categories-update' object.pk %}" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                   </a> 
+                                               {% if not object.non_deletetable %}
+                                               <form action="{% url 'dashboard:categories-delete' object.pk %}" method="post">
+
+                                                
+                                                {% csrf_token %}
+                                                <button class="btn btn-danger btn-sm delete-link ml-2" data-tooltip="tooltip" title="Delete">
+                                                    <e class="far fa-trash-alt"></e>
+                                                </button>
+                                               </form>
+                                               {% endif %}
+                                            </div>
+                                           </td>
+                                       
+
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+{% endblock main %}

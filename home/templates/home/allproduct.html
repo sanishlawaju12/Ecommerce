@@ -1,0 +1,42 @@
+{% extends 'home/base.html' %}
+
+{% block main %}
+
+<section class="section new-arrival">
+    <div class="title">
+      <h1>All Product</h1>
+      <p>All the latest picked from designer of our store</p>
+    </div>
+    
+    <div class="product-center">
+      {% for products in products %}
+      <div class="product-item">
+        <div class="overlay">
+          <a href="/product/{{products.id}}" class="product-thumb">
+            <img src="{{products.image.url}}" alt="" />
+          </a>
+        </div>
+        <div class="product-info">
+          <span>{{products.category}}</span>
+          <a href="/product/{{products.id}}">{{products.name}}</a>
+          <h4>{{products.price}}</h4>
+          <div class="btn-group">
+            {% comment %} <a href="#">Buy Now</a> {% endcomment %}
+            <a href="{% url 'home:add-to-cart' products.id %}">Add To Cart</a>
+          </div>
+        </div>
+        {% comment %} <ul class="icons">
+          <li><i class="bx bx-cart"></i></li>
+          <li><i class="bx bx-cart"></i></li>
+        </ul> {% endcomment %}
+        
+      </div>
+      {% endfor %}
+    </div>
+      
+      
+    
+  </section>
+
+
+{% endblock %}

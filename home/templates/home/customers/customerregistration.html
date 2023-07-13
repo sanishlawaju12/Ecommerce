@@ -1,0 +1,72 @@
+{% extends 'home/home.html' %}
+
+{% block title %} Customer Registration{%endblock%}
+
+{% block main %}
+<style>
+    .errorlist{
+        color: red;
+    }
+    {% comment %} .form-container{
+        background-color:white;
+        border-radius:20px;
+        box-sizing:border-box;
+        height:500px;
+        width:320px;
+        align-items:center;
+    }
+    .form-welcome{
+        color:#eee;
+        font-family:sans-serif;
+        font-size:36px;
+        font-weight:600px;
+        margin-top:30px;
+    } {% endcomment %}
+
+</style>
+
+{% comment %}
+<div class="form-container">
+    <div class="form-welcome">
+        
+   
+    
+            <form action="" method="POST" class="main-form">
+                {% csrf_token %}
+                <div class="line-design">{{form.as_p}}</div>
+                <button class="btn btn-primary">Register as a customer</button>
+            </form>
+        </div>
+    
+</div>
+{% endcomment %}
+<div class="container-regform">
+    <input type="checkbox" id="check">
+    <div class="registration form">
+        <header>Signup Form</header>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% comment %} <input type="text" name="username" placeholder="Enter your username">
+        <input type="password" name="password" placeholder="Create a password">
+        <input type="email" name"email" placeholder="Enter your email">
+        <input type="text" name="full_name" placeholder="Full Name">
+        <input type="text" name="address" placeholder="Enter your address">
+        <input type="number" name="contact" placeholder="Enter your contact No."> {% endcomment %}
+        {{form.as_p}}
+        <button class="button">Register</button>
+       {% if error %}
+
+       <li style="color:red;">{{error}}</li>
+ 
+       {% endif %}
+    </form>
+    <div class="signup">
+      <span class="signup">Already have an account?
+       <label for="check"><a href="{% url 'home:customerlogin'%}">Login</a></label>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+{%endblock%}

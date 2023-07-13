@@ -1,0 +1,184 @@
+{% extends 'home/base.html' %}
+
+
+
+
+{% block main %}
+
+{% comment %} <div class="hero">
+  {% for products in is_latest %}
+    <div class="glide" id="glide_1">
+      <div class="glide__track" data-glide-el="track">
+        <ul class="glide__slides">
+          <li class="glide__slide">
+            <div class="center">
+              <div class="left">
+                <span class="">{{products.name}}</span>
+                <h1 class="">NEW COLLECTION!</h1>
+                <p>Trending from men's and women's  style collection</p>
+                <a href="/product/{{products.id}}" class="hero-btn">SHOP NOW</a>
+              </div>
+              <div class="right">
+                  <img class="img1" src="{{products.image.url}}" alt="">
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    {%endfor%}
+  </div> {% endcomment %}
+
+ <!-- Categories Section -->
+ {% comment %} <section class="section category">
+   <div class="cat-center">
+    {% for category in categories %}
+     <div class="cat">
+      
+      <a href="/category/{{category.id}}">
+       <img src="/static/home/images/cat3.jpg" alt="" />
+       <div>
+         <p>{{category.title}}</p>
+       </div>
+      </a>
+      
+     </div>
+     {% endfor %}
+   </div>
+ </section> {% endcomment %}
+
+  <!-- Featured -->
+
+  <section class="section new-arrival">
+    <div class="title">
+      <h1>All Product</h1>
+      <p>All the latest picked from designer of our store</p>
+    </div>
+    
+    <div class="product-center">
+      {% for products in allProduct %}
+      <div class="product-item">
+        <div class="overlay">
+          <a href="/product/{{products.id}}" class="product-thumb">
+            <img src="{{products.image.url}}" alt="" />
+          </a>
+        </div>
+        <div class="product-info">
+          <span>{{products.category}}</span>
+          <a href="/product/{{products.id}}">{{products.name}}</a>
+          <h4>{{products.price}}</h4>
+          <div class="btn-group">
+            {% comment %} <a href="{% url 'home:checkout' %}">Buy Now</a> {% endcomment %}
+            <a href="{% url 'home:add-to-cart' products.id%}">Add To Cart</a>
+          </div>
+        </div>
+        {% comment %} <ul class="icons">
+          <li><i class="bx bx-cart"></i></li>
+          <li><i class="bx bx-cart"></i></li>
+        </ul> {% endcomment %}
+        
+      </div>
+      {% endfor %}
+    </div>
+      
+      
+    
+  </section>
+
+ <!-- New Arrivals -->
+ <section class="section new-arrival">
+   <div class="title">
+     <h1>MEN'S CLOTHING</h1>
+     <p>Hello buddy, buy me please</p>
+   </div>
+   
+   <div class="product-center">
+    {% for products in mens %}
+     <div class="product-item">
+       <div class="overlay">
+         <a href="/product/{{products.id}}" class="product-thumb">
+           <img src="{{products.image.url}}" alt="" />
+         </a>
+       </div>
+       <div class="product-info">
+         <span>{{products.category}}</span>
+         <a href="/product/{{products.id}} ">{{products.name}}</a>
+         <h4>{{products.price}}</h4>
+         <div class="btn-group">
+          {% comment %} <a href="{% url 'home:checkout' %}">Buy Now</a> {% endcomment %}
+          <a href="{% url 'home:add-to-cart' products.id%}">Add To Cart</a>
+        </div>
+       </div>
+    
+     </div>
+     {% endfor %}
+    </div>
+     
+   
+ </section>
+
+  <!-- New Arrivals -->
+  <section class="section new-arrival">
+    <div class="title">
+      <h1>WOMEN'S CLOTHES</h1>
+      <p></p>
+    </div>
+    
+    <div class="product-center">
+      {% for products in womens %}
+      <div class="product-item">
+        <div class="overlay">
+          <a href="/product/{{products.id}}" class="product-thumb">
+            <img src="{{products.image.url}}" alt="" />
+          </a>
+        </div>
+        <div class="product-info">
+          <span>{{products.category}}</span>
+          <a href="/product/{{products.id}}">{{products.name}}</a>
+          <h4>{{products.price}}</h4>
+          <div class="btn-group">
+            {% comment %} <a href="{% url 'home:checkout' %}">Buy Now</a> {% endcomment %}
+            <a href="{% url 'home:add-to-cart' products.id%}">Add To Cart</a>
+          </div>
+        </div>
+       
+      </div>
+      {% endfor %}
+    </div>
+      
+    
+  </section>
+
+
+
+ {% comment %} <!-- Contact -->
+ <section class="section contact">
+   <div class="row">
+     <div class="col">
+       <h2>EXCELLENT SUPPORT</h2>
+       <p>We love our customers and they can reach us any time
+       of day we will be at your service 24/7</p>
+       <a href="" class="btn btn-1">Contact</a>
+     </div>
+     <div class="col">
+       <form action="">
+         <div>
+           <input type="email" placeholder="Email Address">
+         <a href="">Send</a>
+         </div>
+       </form>
+     </div>
+   </div>
+ </section> {% endcomment %}
+
+ {% comment %} <!-- Footer -->
+ <footer class="footer">
+   <div class="row">
+     <div class="col d-flex">
+       <span><i class='bx bxl-facebook-square'></i></span>
+       <span><i class='bx bxl-instagram-alt' ></i></span>
+     </div>
+   </div>
+ </footer> {% endcomment %}
+
+{% endblock main%}

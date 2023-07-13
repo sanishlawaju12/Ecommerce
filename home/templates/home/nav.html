@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+
+{% block navbar%}
+
+<nav>
+    <input type="checkbox" id="check">
+    <label for="check" class="checkbtn">
+        <i class="fas fa-bars"></i>
+    </label>
+    <label class="logo"><a href="{%  url 'home:home' %}"><img src="/static/home/images/lvd.png"></img></a></label>
+    <ul>
+        <li><a class="active" href="{% url 'home:home' %}">Home</a></li>
+        <li><a href="{% url 'home:allproduct' %}">Product</a></li>
+        <li><a href="{%url 'home:collections' %}">Collections</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+
+</nav>
+
+{% endblock navbar %}

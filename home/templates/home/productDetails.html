@@ -1,0 +1,63 @@
+{% extends 'home/home.html' %}
+
+
+{%block main%}
+    <!-- Product Details -->
+{% comment %} {%if products %}  {% endcomment %}
+    <section class="section product-detail">
+    {% comment %} {% for products in mens %} {% endcomment %}
+      <div class="details container">
+        
+        <div class="left image-container">
+          <div class="main">
+            <img src="{{products.image.url}}" id="zoom" alt="" />
+          </div>
+        </div>
+        <div class="right">
+          <span>{{products.category}}</span>
+          <h1>{{products.name}}</h1>
+          <div class="price">{{products.price}}</div>
+          <form>
+            {% comment %} <div>
+              
+              <select>
+               
+                
+                {% for size in products.sizes.all %}
+                <option value="size">{{size.size}}</option>
+               
+                {% endfor %}
+              </select>
+              
+              <span><i class="bx bx-chevron-down"></i></span>
+             
+            </div> {% endcomment %}
+            {% if products.size_variant.all %}
+         
+              <label>Select size:</label><br>
+            
+                {% for size in products.size_variant.all %}
+                
+                  <input type="radio" name="select_size" {% if selected_size == size.size_name%} checked="" {% endif %}>
+                  <label for="sizes">{{size.size_name}}</label><br>
+                
+                {% endfor %}
+          
+          {% endif %}
+          </form>
+          <form class="form">
+            <input type="text" placeholder="1" />
+            <a href="{% url 'home:add-to-cart' products.id %}" class="addCart">Add To Cart</a>
+          </form>
+          <h3>Product Detail</h3>
+          <p>
+            {{products.description}}
+          </p>
+        </div>
+        
+      </div>
+      {% comment %} {%endfor%} {% endcomment %}
+    </section>
+{% comment %} {% endif %} {% endcomment %}
+{%endblock main%}
+

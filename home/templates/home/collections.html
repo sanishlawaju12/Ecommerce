@@ -1,0 +1,49 @@
+{% extends 'home/base.html' %}
+
+{% block main %}
+
+    
+<!-- Categories Section -->
+<section class="section category">
+   <div class="cat-center">
+    {% for category in category %}
+     <div class="cat">
+      
+      <a href="/category/{{category.id}}">
+       <img src="{{category.image.url}}" alt="" />
+       <div>
+         <p>{{category.title}}</p>
+       </div>
+      </a>
+      
+     </div>
+     {% endfor %}
+     
+   </div>
+ </section>
+
+
+
+{% comment %} 
+ <div class= "container">
+    <div class= "row">
+        <div class= "col-md-12">
+            <h1>collections</h1>
+                <div class= "row">
+                        {% for product in category %}
+                            <div class= "col-md-4">
+                                <div class= "card">
+                                    <div class= "card-body">
+                                        <div class= "category-image">
+                                            <img src="{{ product.image.url }}" alt="category image">
+                                        </div>
+                                    <h4>{{ category.title }} </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+            
+        </div>
+ </div> {% endcomment %}
+{% endblock %}
