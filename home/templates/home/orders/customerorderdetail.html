@@ -4,20 +4,21 @@
 {% block title %}Order Detail {% endblock %}
 
 {% block main %}
-<div class="container">
+<div class="container py-4" style="margin-top:105px;">
     <div class="row">
         <div class="col-md-8 mx-auto">
             <h3>Order Detail</h3><hr>
             <p><span class="font-weight-bold">Order ID: </span> #ORDER_{{ord_obj.id}}</p>
             <p><span class="font-weight-bold">Order Status: </span> {{ord_obj.order_status}}</p>
             <p><span class="font-weight-bold">Order On: </span> {{ord_obj.created_at}}({{ord_obj.created_at|timesince}} ago)</p>
-            <p><span class="font-weight-bold">Customer Information: </span> By {{ord_obj.ordered_by}}, {{ord_obj.mobile}}</p>
-            <p><span class="font-weight-bold">Shipping Address: </span> By {{ord_obj.shipping_address}} ({{ord_obj.email}})</p>
-            <h4>Ordered Items</h4>
+            <p><span class="font-weight-bold">Customer Information: </span>{{ord_obj.ordered_by}}, {{ord_obj.mobile}}</p>
+            <p><span class="font-weight-bold">Shipping Address: </span>{{ord_obj.shipping_address}} ({{ord_obj.email}})</p>
+            <hr><h4 class="text-center py-4">Ordered Items</h4>
             <table class="table">
                 <thead>
                     <tr>
                         <th>SN</th>
+                        {% comment %} <th>Item</th> {% endcomment %}
                         <th>Item</th>
                         <th>Rate</th>
                         <th>Quantity</th>
@@ -28,6 +29,7 @@
                     {% for cp in ord_obj.cart.cartproduct_set.all %}
                     <tr>
                         <td>{{forloop.counter}}</td>
+                        {% comment %} <td>{{cp.product.image.url}}</td> {% endcomment %}
                         <td><a target="_blank" href="{% url 'home:productDetails' cp.product.id %}">{{cp.product.name}}({{cp.product.id}})</a></td>
                         <td>{{cp.rate}}</td>
                         <td>{{cp.quantity}}</td>
@@ -43,5 +45,9 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 {% endblock %}

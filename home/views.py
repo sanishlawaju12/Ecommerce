@@ -6,7 +6,7 @@ from accounts import admin
 from  dashboard.forms import *
 from django.urls import reverse_lazy, reverse
 from dashboard.models import Product, Customer,Category,Cart,CartProduct,SizeVariant,Order
-from .forms import CheckoutForm, CustomerRegistrationForm , CustomerLoginForm
+from .forms import CheckoutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
@@ -21,8 +21,10 @@ from django.conf import settings
 from django.db.models import Q
 from .models import *
 from .forms import *
-from django.http import HttpResponseRedirect,HttpResponse
 import requests
+from requests import request
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 # Create your views here.
@@ -40,10 +42,21 @@ class IndexView(TemplateView):
        context["is_latest"] = Product.objects.filter(is_latest=True)
        context["mens"] = Product.objects.filter(category__slug='mens')
        context["womens"] = Product.objects.filter(category__slug='womens')
+       context["menjackets"] = Product.objects.filter(category__slug='menjackets')
+       context["menpants"] = Product.objects.filter(category__slug='menpants')
+       context["mentshirts"] = Product.objects.filter(category__slug='mentshirts')
+       context["womenjackets"] = Product.objects.filter(category__slug='womenjackets')
+       context["womenpants"] = Product.objects.filter(category__slug='womenpants')
+       context["womentshirts"] = Product.objects.filter(category__slug='womentshirts')
        context["allProduct"]= Product.objects.all()
        context["categories"]=Category.objects.all()
        return context
 
+def aboutus(request):
+    return render(request, 'aboutus.html')
+
+def contactus(request):
+    return render(request, 'contactus.html')
 
 def productDetails(request,pk):
     products = Product.objects.get(id=pk)
@@ -66,6 +79,7 @@ class AllProductView(TemplateView):
         context["products"] = Product.objects.all()
         return context
     
+
 
 def categoryView(request,pk):
     category = Category.objects.get(id = pk)
@@ -192,33 +206,6 @@ class OrderCreateView(CreateView):
         
 
     
-# class CustomerLogoutView(View):
-#     def get(self,request):
-#         logout(request)
-#         return redirect("home:home")
-    
-# class CustomerLoginView(FormView):
-#     template_name = "home/customers/customerlogin.html"
-#     form_class = CustomerLoginForm
-#     success_url = reverse_lazy ("home:home")
-
-#     def form_valid(self,form):
-#         uname = form.cleaned_data.get("username")
-#         pword = form.cleaned_data.get("password")
-#         usr = authenticate(username= uname, password=pword)
-#         if usr is not None and Customer.objects.filter(user=usr).exists():
-#             login(self.request,usr)
-#         else:
-#             return render(self.request,self.template_name,{"form": self.form_class,"error":"Invalid credential"})
-        
-#         return super().form_valid(form)
-    
-#     def get_success_url(self):
-#         if "next" in self.request.GET:
-#             next_url = self.request.GET.get("next")
-#             return next_url
-#         else:
-#             return self.success_url
         
 class CustomerProfileView(TemplateView):
     template_name = "home/customers/customerprofile.html"
@@ -235,7 +222,6 @@ class CustomerProfileView(TemplateView):
         customer = self.request.user.customer
         context['customer'] = customer
         return context
-
 
 
 # @login_required(login_url='home:customerlogin')
@@ -347,15 +333,26 @@ class EcomMixin(object):
 
 
 
-class AddToCartView(EcomMixin, TemplateView):
+class AddToCartView(LoginRequiredMixin,EcomMixin, TemplateView):
+    login_url = 'accounts:customerlogin'
+    REDIRECT_FIELD_NAME = 'home'
     template_name = "home/carts/addtocart.html"
     
     def get_context_data(self, **kwargs):
+        
         context = super().get_context_data(**kwargs)
         # get product id from requested url
         product_id = self.kwargs['pro_id']
-        # get product
+        # get selected size variant from query parameter
+        # size_variant_id = self.request.GET.get('size_variant_id')
+       
+        # get product and size variant
         product_obj = Product.objects.get(id=product_id)
+        # size_variant_obj = SizeVariant.objects.get(id=size_variant_id)
+
+        
+
+
 
         # check if cart exists
         cart_id = self.request.session.get("cart_id", None)
@@ -372,12 +369,14 @@ class AddToCartView(EcomMixin, TemplateView):
                 cartproduct.save()
                 cart_obj.total += product_obj.price
                 cart_obj.save()
+                messages.success(self.request,"product added to cart")  
             # new item is added in cart
             else:
                 cartproduct = CartProduct.objects.create(
-                    cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1, subtotal=product_obj.price)
+                    cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1,  subtotal=product_obj.price)
                 cart_obj.total += product_obj.price
-                cart_obj.save()
+                cart_obj.save()  
+                messages.success(self.request,"product added to cart")        
 
         else:
             cart_obj = Cart.objects.create(total=0)
@@ -386,6 +385,7 @@ class AddToCartView(EcomMixin, TemplateView):
                 cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1, subtotal=product_obj.price)
             cart_obj.total += product_obj.price
             cart_obj.save()
+            
 
         return context
 
@@ -495,7 +495,7 @@ class CustomerProfileView(TemplateView):
         if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
             pass
         else:
-            return redirect("/login/?next=/profile/")
+            return redirect("/accounts/login/?next=/profile/")
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -633,7 +633,7 @@ def collectionsviews(request,slug):
         products = Product.objects.filter(category__slug=slug)
         category_name = Category.objects.filter(slug=slug).first()
         context ={'products': products, 'category_name': category_name}
-        return render(request, "home/products/index.html", context)
+        return render(request, "home/collections/collection.html", context)
     else:
         messages.warning(request, "No such category found")
         return redirect('collections')

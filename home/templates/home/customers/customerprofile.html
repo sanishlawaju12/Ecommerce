@@ -2,43 +2,50 @@
 
 {% block title %}My Profile{% endblock %}
 
-{% block main %}
-<div class="container">
+{% block form %}
+<div class="container py-5" style="margin-top:105px">
     <div class="row">
         <h3>Your Information</h3><hr>
     
-            <p><span>Name: </span> {{customer.full_name}}</p>
-            <p><span>Username: </span> {{customer.user.username}}</p>
-            <p><span>Email: </span> {{customer.user.email}}</p>
-            <p><span>Address: </span> {{customer.address}}</p>
-            <p><span>Contact No.: </span> {{customer.contact}}</p>
-    
-        <div class="col-md-8">
-            <h3>Previous Orders</h3>
-            <hr>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Order ID</th>
-                        <th>Amount</th>
-                        <th>Ordered on</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ord in orders %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td><a href="{% url 'home:customerorderdetail' ord.pk %}"> #ORDER_{{ord.id}}</a></td>
-                        <td>{{ord.total}}</td>
-                        <td>{{ord.created_at|timesince}} ago</td>
-                        <td>{{ord.order_status}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div> 
+            <p><span class="font-weight-bold">Name: </span> {{customer.full_name}}</p>
+            <p><span class="font-weight-bold">Username: </span> {{customer.user.username}}</p>
+            <p><span class="font-weight-bold">Email: </span> {{customer.user.email}}</p>
+            <p><span class="font-weight-bold">Address: </span> {{customer.address}}</p>
+            <p><span class="font-weight-bold">Contact No.: </span> {{customer.contact}}</p>
+    <hr>
+            <div class="container-order ">
+                <h3 class="title text-center pb-4">Previous Order</h3>
+                <div class="d-flex justify-content-center row">
+                    <div class="col-md-10">
+                        <div class="rounded">
+                            <div class="table-responsive table-borderless">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Order #</th>
+                                            <th>Total</th>
+                                            <th>status</th>
+                                            <th>Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        {% for ord in orders %}
+                                        <tr class="cell-1">
+                                            <td>{{forloop.counter}}</td>
+                                            <td><a href="{% url 'home:customerorderdetail' ord.pk %}"> #ORDER_{{ord.id}}</a></td>
+                                            <td>{{ord.total}}</td>
+                                            <td>{{ord.order_status}}</td>
+                                            <td>{{ord.created_at|timesince}} ago</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
     </div>
 </div>
 {% endblock %}

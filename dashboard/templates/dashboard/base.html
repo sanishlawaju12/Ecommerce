@@ -19,6 +19,8 @@
 
     <!-- Custom styles for this template-->
     <link href="/static/dashboard/css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 </head>
 
@@ -63,7 +65,13 @@
                     <span>Category</span>
                 </a>
             </li>
-            
+            <li class="nav-item" style="list-style:none">
+                <a class="nav-link " href="{% url 'dashboard:brands-list' %}" 
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Brand</span>
+                </a>
+            </li>
              <li class="nav-item" style="list-style:none">
                 <a class="nav-link " href="{% url 'dashboard:customers-list' %}" 
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -79,22 +87,29 @@
                 </a>
             </li>  
             <li class="nav-item" style="list-style:none">
-                <a class="nav-link " href="{% url 'dashboard:orders-list' %}" 
+                <a class="nav-link " href="{% url 'dashboard:adminorderlist' %}" 
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Order</span>
                 </a>
             </li>
-            <li class="nav-item" style="list-style:none">
+            {% comment %} <li class="nav-item" style="list-style:none">
                 <a class="nav-link " href="{% url 'dashboard:carts-list' %}" 
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Cart</span>
                 </a>
-            </li>
+            </li> {% endcomment %}
+            {% comment %} <li class="nav-item" style="list-style:none">
+                <a class="nav-link " href="{% url 'dashboard:sales_history' %}" 
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Sales</span>
+                </a>
+            </li> {% endcomment %}
             
             <li class="nav-item" style="list-style:none">
-                <a class="nav-link " href="#" data-toggle="modal" data-target="#logoutModal"
+                <a class="nav-link " href="{% url 'accounts:adminlogout'}" data-toggle="modal" data-target="#logoutModal"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     <span>Logout</span>
@@ -123,7 +138,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="/dashboard/accounts/logout">Logout</a>
+                <a class="btn btn-primary" href="{% url 'accounts:adminlogout' %}">Logout</a>
             </div>
         </div>
     </div>
@@ -154,7 +169,7 @@
 
             </div>
             <!-- End of Main Content -->
-
+{% comment %} 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -163,7 +178,7 @@
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
+            <!-- End of Footer --> {% endcomment %}
 
         </div>
         <!-- End of Content Wrapper -->
@@ -190,13 +205,19 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="#">Logout</a>
+                    <a class="btn btn-primary" href="/dashboard/accounts/adminlogout">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    
     <script src="/static/dashboard/vendor/jquery/jquery.min.js"></script>
     <script src="/static/dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -220,6 +241,8 @@
         }
         );
     </script>
+
+
     {% block script %}
 
 

@@ -10,54 +10,37 @@
         
         <div class="left image-container">
           <div class="main">
-            <img src="{{products.image.url}}" id="zoom" alt="" />
+            <img src="{{products.image.url}}" class="img-fluid" id="zoom" alt="" />
           </div>
         </div>
         <div class="right">
           <span>{{products.category}}</span>
           <h1>{{products.name}}</h1>
-          <div class="price">{{products.price}}</div>
-          <form>
-            {% comment %} <div>
-              
-              <select>
-               
-                
-                {% for size in products.sizes.all %}
-                <option value="size">{{size.size}}</option>
-               
-                {% endfor %}
-              </select>
-              
-              <span><i class="bx bx-chevron-down"></i></span>
-             
-            </div> {% endcomment %}
-            {% if products.size_variant.all %}
-         
-              <label>Select size:</label><br>
-            
-                {% for size in products.size_variant.all %}
-                
-                  <input type="radio" name="select_size" {% if selected_size == size.size_name%} checked="" {% endif %}>
-                  <label for="sizes">{{size.size_name}}</label><br>
-                
-                {% endfor %}
-          
-          {% endif %}
-          </form>
-          <form class="form">
-            <input type="text" placeholder="1" />
-            <a href="{% url 'home:add-to-cart' products.id %}" class="addCart">Add To Cart</a>
-          </form>
-          <h3>Product Detail</h3>
+          <div class="price">Rs {{products.price}}</div>
+          <h5>Product Detail</h5>
           <p>
             {{products.description}}
           </p>
+          <br>
+          
+   
+          
+          <form class="form">
+            {% comment %} <input type="text" placeholder="1" /> {% endcomment %}
+            <a href="{% url 'home:add-to-cart' products.id %}" class="addCart border-2">Add To Cart</a>
+          </form>
         </div>
         
       </div>
       {% comment %} {%endfor%} {% endcomment %}
     </section>
 {% comment %} {% endif %} {% endcomment %}
+
+<script>
+  function get_correct_size(size) {
+    window.location.href = window.location.pathname + `?size=${size}`
+  }
+</script>
+
 {%endblock main%}
 

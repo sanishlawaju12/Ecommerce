@@ -1,0 +1,146 @@
+{% extends 'dashboard/base.html' %}
+
+{% block main %}
+
+<div class="card" id="invoice-content">
+    <div class="card-body">
+      <div class="container mb-5 mt-3">
+        <div class="row d-flex align-items-baseline">
+          <div class="col-xl-9">
+            <p style="color: #7e8d9f;font-size: 20px;">ORDER >> <strong>ID: #ORDER_{{ord_obj.id}}</strong></p>
+          </div>
+          <div class="col-xl-3 float-end">
+            <a class="btn btn-light text-capitalize border-0" data-mdb-ripple-color="dark"><i
+                class="fas fa-print text-primary"></i> Print</a>
+            <a class="btn btn-light text-capitalize" data-mdb-ripple-color="dark"><i
+                class="far fa-file-pdf text-danger"></i> Export</a>
+          </div>
+          <hr>
+        </div>
+  
+        <div class="container" id="invoice-content">
+          <div class="col-md-12">
+            <div class="text-center">
+              <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+              <p class="pt-0">MDBootstrap.com</p>
+            </div>
+  
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-xl-8">
+              <ul class="list-unstyled">
+                <li class="text-muted">To: <span style="color:#5d9fc5 ;">{{ord_obj.ordered_by}}</span></li>
+                <li class="text-muted">{{ord_obj.shipping_address}}</li>
+                <li class="text-muted"><i class="fas fa-phone"></i> {{ord_obj.mobile}}</li>
+              </ul>
+            </div>
+            <div class="col-xl-4">
+              <p class="text-muted">Order</p>
+              <ul class="list-unstyled">
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="fw-bold">ID:</span>#ORDER_{{ord_obj.id}}</li>
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="fw-bold">Creation Date: </span>{{ord_obj.created_at}}</li>
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="me-1 fw-bold">Status:</span><span class="badge bg-warning text-black fw-bold">
+                        {{ord_obj.order_status}}</span></li>
+              </ul>
+            </div>
+          </div>
+  
+          <div class="row my-2 mx-1 justify-content-center">
+            <table class="table table-striped table-borderless">
+              <thead style="background-color:#84B0CA ;" class="text-white">
+                <tr>
+                  <th scope="col">SN</th>
+                  <th scope="col">Items</th>
+                  <th scope="col">Rate</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for cp in ord_obj.cart.cartproduct_set.all %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td><a target="_blank"
+                    href="{% url 'home:productDetails' cp.product.id %}">{{cp.product.name}}({{cp.product.id}})</a>
+                    </td>
+                  <td>{{cp.rate}}</td>
+                  <td>{{cp.quantity}}</td>
+                  <td>{{cp.subtotal}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+  
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-xl-8">
+              <p class="ms-3">Add additional notes and payment information</p>
+  
+            </div>
+            <div class="col-xl-3">
+              <p class="text-black float-start"><span class="text-black me-3"> Total Amount</span><span
+                  style="font-size: 25px;">{{ord_obj.total}}/-</span></p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-xl-10">
+              <p>Thank you for your purchase</p>
+            </div>
+            <form action="{% url 'dashboard:adminorderstatuschange' ord_obj.id %}" method="POST">
+                {% csrf_token %}
+                <select name="status">
+                    {% for i, j in allstatus %}
+                    <option value="{{i}}" {% if i == ord_obj.order_status %}selected{% endif %}>{{j}}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-success">Change</button>
+                <button class="btn btn-primary" onclick="generateReport()"> <i class="fas fa-file"></i></button>
+            </form>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    {% comment %} function generatePDF() {
+        // Create a new jsPDF instance
+        const doc = new jsPDF();
+      
+        // Define the HTML content to be converted to PDF
+        const htmlContent = document.getElementById('invoice-content').innerHTML;
+      
+        // Add HTML content to the PDF
+        doc.fromHTML(htmlContent, 15, 15,{
+            width: 170
+        });
+      
+        // Save or download the PDF
+        doc.save('dashboard/orders/invoice.pdf');
+      }
+       {% endcomment %}
+       function generateReport() {
+       // Create a new jsPDF instance
+        const doc = new jsPDF();
+
+        // Define the HTML content to be converted to PDF
+        const htmlContent = document.getElementById('invoice-content').innerHTML;
+
+        // Add HTML content to the PDF
+        doc.fromHTML(htmlContent, 15, 15, {
+            width: 170
+        });
+
+        // Save or download the PDF
+        doc.save('invoice_bill.pdf');
+      }
+  </script>
+
+{% endblock%}

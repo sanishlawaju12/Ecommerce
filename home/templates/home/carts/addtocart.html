@@ -3,7 +3,22 @@
 {% block title %} Add To Cart{% endblock %}
 
 {% block main %}
-<div class = "container">
-    <h3>Product added to cart successfully</h3>
-</div>
+
+
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
+
+                <script>
+                    alertify.success("{{ message}}");
+                </script>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+
 {% endblock %}

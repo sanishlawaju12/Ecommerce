@@ -11,6 +11,10 @@ urlpatterns =[
 
     path('', views.IndexView.as_view(), name="home"),
 
+    path('aboutus/', views.aboutus, name="aboutus"),
+
+    path('contactus/', views.contactus, name="contactus"),
+
     path('allproduct', AllProductView.as_view(), name="allproduct"),
 
     # path('category/<str:pk>', views.CategoryView.as_view(), name='category'),
@@ -32,6 +36,7 @@ urlpatterns =[
     path("profile/",CustomerProfileView.as_view(),name="customerprofile"),
     path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(),
          name="customerorderdetail"),
+
 
 
     path("myorder/",MyOrderDetailView.as_view(),name="myorder"),

@@ -20,6 +20,7 @@
                                 <thead>
                                     <tr>
                                         <th>SN</th>
+                                        <th/>Cart</th>
                                         <th>Ordered_by</th>
                                         <th>Shipping Address</th>
                                         <th>Contact</th>
@@ -38,6 +39,7 @@
                                     {% for object in object_list %}
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
+                                        <td>{{ object.cart }}</td>
                                         <td>{{ object.ordered_by }}</td>
                                         <td>{{ object.shipping_address }}</td>
                                         <td>{{ object.mobile }}</td>
@@ -76,4 +78,7 @@
                         </div>
                     </div>
                 </div>
+
+
+
 {% endblock main %}

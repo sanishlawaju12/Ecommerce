@@ -2,41 +2,119 @@
 
 {% block main %}
 
-<section class="section new-arrival">
-    <div class="title">
-      <h1>All Product</h1>
-      <p>All the latest picked from designer of our store</p>
-    </div>
-    
-    <div class="product-center">
-      {% for products in products %}
-      <div class="product-item">
-        <div class="overlay">
-          <a href="/product/{{products.id}}" class="product-thumb">
-            <img src="{{products.image.url}}" alt="" />
-          </a>
+
+  {% comment %} <!-- collection -->
+  <section id = "collection" class = "py-5" style = "margin-top: 104px;">
+    <div class = "container">
+        <div class = "title text-center">
+            <h2 class = "position-relative d-inline-block">All Collection</h2>
         </div>
-        <div class="product-info">
-          <span>{{products.category}}</span>
-          <a href="/product/{{products.id}}">{{products.name}}</a>
-          <h4>{{products.price}}</h4>
-          <div class="btn-group">
-            {% comment %} <a href="#">Buy Now</a> {% endcomment %}
-            <a href="{% url 'home:add-to-cart' products.id %}">Add To Cart</a>
+
+        <div class = "row g-0">
+            
+            <div class = "collection-list mt-4 row gx-0 gy-3">
+              {% for products in products %}
+                <div class = "col-md-6 col-lg-4 col-xl-3 p-2">
+                    <div class = "collection-img position-relative">
+                      <a href="/product/{{products.id}}"><img src = "{{products.image.url}}" class="card-img-top img-fluid"></a>
+                    </div>
+                    <div class = "text-center">
+                        <p class = "text-capitalize my-1"><a class="text-decoration-none link-dark" href="/product/{{products.id}}">{{products.name}}</p></a>
+                        <span class = "fw-bold">{{products.price}}</span>
+                    </div>
+                </div> 
+                {%endfor%}
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- end of collection --> {% endcomment %}
+
+
+<div class="container-fluid bg-trasparent py-4" style = "position:relative;">
+  <div class = "title text-center">
+    <h2 class = "position-relative d-inline-block">All Products</h2>
+  </div>
+  <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+    
+    {% for products in products %}
+    <div class="col hp">
+      <div class="card h-100 shadow m-2 p-2">
+        <a href="/product/{{products.id}}">
+          <img src="{{products.image.url}}" class="card-img-top" alt="product.title" />
+        </a>
+        <div class="card-body text-center">
+          <div class="clearfix mb-3">
+        <a href="/product/{{products.id}}">
+          <span class="text-xl-center">{{products.name}}</span>
+        </a>
           </div>
+          <div class="clearfix p-1">
+            <span class="float-start badge rounded-pill bg-success ">Rs.{{products.price}}</span>  
+          </div>
+          <h5 class="card-desc">
+              <p>{{products.description}}</p>
+          </h5>
+ 
+          <div class="d-grid gap-1 ">
+ 
+            <a href="{% url 'home:add-to-cart' products.id%}" class="btn btn-warning bold-btn">add to cart</a>
+ 
+          </div>
+      
         </div>
-        {% comment %} <ul class="icons">
-          <li><i class="bx bx-cart"></i></li>
-          <li><i class="bx bx-cart"></i></li>
-        </ul> {% endcomment %}
-        
       </div>
-      {% endfor %}
     </div>
-      
-      
-    
-  </section>
+    {% endfor %}
+  </div>
+</div>
+ 
+  <!-- about us -->
+  <section id = "about" class = "py-5">
+    <div class = "container">
+        <div class = "row gy-lg-5 align-items-center">
+            <div class = "col-lg-6 order-lg-1 text-center text-lg-start">
+                <div class = "title pt-3 pb-5">
+                    <h2 class = "position-relative d-inline-block ms-4">About Us</h2>
+                </div>
+                <p class = "lead text-muted">Welcome to our shop! We are passionate about providing high-quality clothing and exceptional customer service.</p>
+                <p>Our mission is to offer the latest fashion trends at affordable prices, making it easier for you to express your unique style. We value your satisfaction and strive to meet your clothing needs.</p>
+            </div>
+            <div class = "col-lg-6 order-lg-0">
+                <img src = "/static/home/images/lvdpasal.jpg" alt = "" class = "img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end of about us -->
+
+
+<!-- start of contact us page -->
+<section id = "contact" class = "py-5">
+<div class="container">
+  <h1>Contact Us</h1>
+  <p>
+    If you have any inquiries, please feel free to contact us using the information below:
+  </p>
+  <ul>
+    <li>Email: Sushiltamang215@gmail.com</li>
+    <li>Phone: +977 9843043102</li>
+    <li>Address: Tourism Market, Suryabinayak, Bhaktapur</li>
+  </ul>
+  <p>
+    You can also reach out to us through our social media channels:
+  </p>
+  <ul>
+    <li>Facebook: <a href="https://www.facebook.com/profile.php?id=100084033919095">LVD Splash, 365 clothing store</a></li>
+  </ul>
+</div>
+</section>
+
+<!-- end of contact us page -->
+
+
+
 
 
 {% endblock %}

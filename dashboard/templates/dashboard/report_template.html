@@ -1,0 +1,45 @@
+<!-- report_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Order Report</title>
+</head>
+<body>
+    <h1>Customer Order Report for {{ ord_obj.ordered_by }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Items</th>
+                <th>Order Date</th>
+                <th>Rate</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <!-- Add other columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for cp in ord_obj.cart.cartproduct_set.all %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><a target="_blank"
+                  href="{% url 'home:productDetails' cp.product.id %}">{{cp.product.name}}({{cp.product.id}})</a>
+                  </td>
+                <td>{{cp.rate}}</td>
+                <td>{{cp.quantity}}</td>
+                <td>{{cp.subtotal}}</td>
+              </tr>
+              {% endfor %}
+        </tbody>
+    </table>
+    <form action="{% url 'dashboard:adminorderstatuschange' ord_obj.id %}" method="POST">
+        {% csrf_token %}
+        <select name="status">
+            {% for i, j in allstatus %}
+            <option value="{{i}}" {% if i == ord_obj.order_status %}selected{% endif %}>{{j}}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-success">Change</button>
+        <button class="btn btn-primary"> <i class="fas fa-file"></i>Generate</button>
+    </form>
+</body>
+</html>

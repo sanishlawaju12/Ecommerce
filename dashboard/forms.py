@@ -17,6 +17,22 @@ class CategoryForm(forms.ModelForm):
                 }
             )
 
+class BrandForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Brand
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update(
+                {
+                    'class': 'form-control',
+                }
+            )
+
+
 class ProductForm(forms.ModelForm):
 
     class Meta:

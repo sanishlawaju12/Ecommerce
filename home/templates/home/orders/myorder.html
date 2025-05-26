@@ -3,34 +3,42 @@
 {% block title %}My Profile{% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row">    
-        <div class="col-md-8">
-            <h3>Previous Orders</h3>
-            <hr>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Order ID</th>
-                        <th>Amount</th>
-                        <th>Ordered on</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ord in orders %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td><a href="{% url 'home:customerorderdetail' ord.pk %}"> #ORDER_{{ord.id}}</a></td>
-                        <td>{{ord.total}}</td>
-                        <td>{{ord.created_at|timesince}} ago</td>
-                        <td>{{ord.order_status}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div> 
+
+
+
+<div class="container-order " style="margin-top:105px;">
+    <h3 class="title text-center py-5">My Orders</h3>
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="rounded">
+                <div class="table-responsive table-borderless">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Order #</th>
+                                <th>Total</th>
+                                <th>status</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+                            {% for ord in orders %}
+                            <tr class="cell-1">
+                                <td>{{forloop.counter}}</td>
+                                <td><a href="{% url 'home:customerorderdetail' ord.pk %}"> #ORDER_{{ord.id}}</a></td>
+                                <td>{{ord.total}}</td>
+                                <td>{{ord.order_status}}</td>
+                                <td>{{ord.created_at|timesince}} ago</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
 {% endblock %}

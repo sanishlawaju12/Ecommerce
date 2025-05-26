@@ -1,109 +1,159 @@
+{% comment %} {% extends 'home/base.html' %}
 
-<!doctype html>
+{% block title %}Customer Login{% endblock %}
+
+{% block form%}
+<style>
+    .errorlist {
+        color: red;
+    }
+</style> {% endcomment %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>News Dashboard Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link
-      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <!-- Glide js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.core.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.theme.css">
-    <!-- Custom StyleSheet -->
-    <link rel="stylesheet" href="/static/home/css/styles.css" />
-    <title>{% block title %} {%endblock title %}</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LVD Suppliers</title>
+    <!-- fontawesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"/>
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="/static/home/bootstrap-5.0.2-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="/static/home/css/main.css" />
+    <link rel="stylesheet" href="/static/home/css/style.css" />
   </head>
   <body>
-    <!-- Header -->
-<header class="header" id="header">
-  <a href="{% url 'home:home' %}" class="logo"><img src="/static/home/images/lvd.png"></img></a>
-  <div class="navbar">
-    <li><a href="{% url 'home:home' %}">Home</a></li>
-    <li><a href="#">Product</a></li>
-    <li><a href="#">Category</a></li>
-    <li><a href="#">Contact</a></li> 
-  </div> 
-  {% comment %} <div class="account-section">
-    <a href="#" class="user"><i class="bi bi-person"></i>Sign In</a>
-    <a href="#">Sign Up</a>
-    <a href="#">Admin Login</a>
-  </div> {% endcomment %}
-  {% if request.user.customer %}
-  <div class="myprofile"> 
-    <span>Welcome</span>
-      <div class="info-profile">
-        <a href="{% url 'home:customerprofile' %}">My Profile</a>
-        <a href="/accounts/logout" >Logout</a>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="{%  url 'home:home' %}">
+          <img src="/static/home/images/lvd.png" alt="site icon" />
+          <span class="text-uppercase fw-lighter ms-2">Suppliers</span>
+        </a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse order-lg-1" id="navMenu">
+            <ul class="navbar-nav mx-auto text-center">
+              <li class="nav-item px-2 py-2">
+                <a class="nav-link text-uppercase text-dark" href="{% url 'home:home' %}">home</a>
+              </li>
+              <li class="nav-item px-2 py-2">
+                <a class="nav-link text-uppercase text-dark" href="{% url 'home:allproduct' %}">product</a>
+              </li>
+              <li class="nav-item px-2 py-2">
+                <a class="nav-link text-uppercase text-dark" href="{% url 'home:collections' %}">collections</a>
+              </li>
+              <li class="nav-item px-2 py-2">
+                <a class="nav-link text-uppercase text-dark" href="#about">about us</a>
+              </li>
+              <li class="nav-item px-2 py-2 border-0">
+                <a class="nav-link text-uppercase text-dark" href="#contact">Contact</a>
+              </li>
+            </ul>
+
+        {% if request.user.customer %}
+          <div class="myprofile">
+            <span>Welcome,{{customer.user.username}}</span>
+            <div class="info-profile">
+              <a href="{% url 'home:customerprofile' %}">My Profile</a>
+              <a href="{% url 'home:myorder' %}">My order</a>
+              <a href="/accounts/customerlogout">Logout</a>
+            </div>
+          </div>
+          <div class="icon">
+            <a href="{% url 'home:mycart' %}"><i class="fa fa-shopping-cart"></i></a>
+          </div>
+          {%else%}
+          <div class="dropdown">
+            <button><i class="fas fa-user"></i></button>
+            <div class="dropdown-options">
+              <a href="/accounts/register">Sign Up</a>
+              <a href="/accounts/login">Sign In</a>
+              <a href="/accounts/adminloginform">Admin Login</a>
+            </div>
+            {% endif %}
+            
+          </div>
+          
+        </div>
+        
       </div>
-  </div>
-  {%else%}
-  <div class="dropdown">
-    <button>Accounts</button>
-    <div class="dropdown-options">
-      <a href="/accounts/registerform">Sign Up</a>
-      <a href="/accounts/loginform  ">Sign In</a>
       
-      <a href="{% url 'accounts:adminloginform' %}">Admin Login</a>
-    </div>
-    {% endif %}
-  </div>
-  <div class="cart-section">
-    <a href="#" class="cart"><box-icon name='cart'></box-icon></i></a>
+    </nav>
+
+    <!-- end of navbar -->
+
+
+<div class="container-form">
+    <input type="checkbox" id="check">
+    <div class="login form">
+      <header>Admin Login Form</header>
+      <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        {% comment %} <input type="text" id="username" name="username" placeholder="username">
+        <input type="password" id="password" name="password" placeholder="password"> {% endcomment %}
+       <button class="button">Login</button>
+       {% if error %}
+
+       <li style="color:red;">{{error}}</li>
+ 
+       {% endif %}
+    </form>
     
+     
+    </div>
+ 
   </div>
 
-</header>
+{% comment %} 
+{% endblock %} {% endcomment %}
 
+<!--Js-->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- jquery -->
+<script src="/static/home/js/jquery-3.6.0.js"></script>
+<!-- isotope js -->
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+<!-- bootstrap js -->
+ <!-- CSS -->
+ <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+ <!-- Default theme -->
+ <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
 
+<script src="/static/home/bootstrap-5.0.2-dist//static/home/js/bootstrap.min.js"></script>
+<!-- custom js -->
+<script src="/static/home/js/script.js"></script>
+<!-- filter js-->
+<script src="/static/home/js/filter.js"></script>
 
-    {% comment %} <div class="text-center col-4 m-4">
-        <h3 class="text-center mb-4">Sign In</h3>
-        <form method="POST" autocomplete="off">
-            {% csrf_token %}
-            <div class="form-outline mb-4">
-                <input class="form-control" type="text" name="email" placeholder="E-mail Address" required>
-                <div class="login-error mt-0">{{ form.email.errors|striptags }}</div>
-            </div>
-            <div class="form-outline mb-4">
-                <input class="form-control" type="password" name="password" placeholder="Password" required>
-                <div class="login-error mt-0">{{ form.password.errors|striptags }}</div>
-            </div>
-            <div class="form-button">
-                <button id="submit" type="submit" class="btn btn-primary">Login</button>
-            </div>
-        </form> 
-    </div>    {% endcomment %}
+<script>
+  {% for flashmsg in messages%}
+    alertify.set('notifier','position', 'top-right');
+    alertify.success('{{flashmsg}}');
+  {% endfor %}
+</script>
 
-
-
-    <div class="container-form">
-      <input type="checkbox" id="check">
-      <div class="login form">
-        <header>Admin Login Form</header>
-        <form action="" method="POST">
-          {% csrf_token %}
-          <input type="text" name="email" placeholder="Enter your email">
-          <input type="password" name="password" placeholder="Enter your password">
-         <button class="button">Login</button>
-         {% if error %}
-  
-         <li style="color:red;">{{error}}</li>
-   
-         {% endif %}
-      </form>
-  
-      
-       
-      </div>
-   
-    </div>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>

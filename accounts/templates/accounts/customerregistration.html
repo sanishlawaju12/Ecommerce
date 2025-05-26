@@ -1,8 +1,8 @@
-{% extends 'home/home.html' %}
+{% extends 'home/base.html' %}
 
 {% block title %} Customer Registration{%endblock%}
 
-{% block main %}
+{% block form %}
 <style>
     .errorlist{
         color: red;
@@ -57,37 +57,35 @@
     <form action="" method="POST">
         {% csrf_token %}
         
-        {% comment %} {{form.as_p}} {% endcomment %}
+         {{form.as_p}} 
 
+            {% comment %} <input type="text" class="form-control" value="{{ username }}" name="username" placeholder="Username">
+            {% if errors.username %}
+            <p class="error">{{ errors.username }}</p>
+            {% endif %}
 
-{% comment %}         
+            <input type="password" class="form-control" value="{{ Password }}" name="Password" placeholder="Password">
+            {% if errors.Password %}
+            <p class="error">{{ errors.Password }}</p>
+            {% endif %}
+       
             <input type="email" class="form-control" value="{{ email }}" name="email" placeholder="Email">
             {% if errors.email %}
             <p class="error">{{ errors.email }}</p>
             {% endif %}
-        
-        
-            <input type="text" class="form-control" value="{{ Password }}" name="Password" placeholder="Password">
-            {% if errors.Password %}
-            <p class="error">{{ errors.Password }}</p>
-            {% endif %}
-        
 
-        
-            <input type="text" class="form-control" value="{{ username }}" name="username" placeholder="Username">
-            {% if errors.username %}
-            <p class="error">{{ errors.username }}</p>
-            {% endif %}
-       
-            <input type="text" class="form-control" value="{{ contact }}" name="contact" placeholder="Contact">
-            {% if errors.contact %}
-            <p class="error">{{ errors.contact }}</p>
-            {% endif %}
-        
             <input type="text" class="form-control" value="{{ address }}" name="address" placeholder="Address">
             {% if errors.address %}
             <p class="error">{{ errors.address }}</p>
+            {% endif %} 
+
+            <input type="text" class="form-control" value="{{ contact }}" name="contact" placeholder="Contact">
+            {% if errors.contact %}
+            <p class="error">{{ errors.contact }}</p>
             {% endif %} {% endcomment %}
+         
+            
+            
             {% comment %} {% for message in messages %}
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
 			<h6 id="messages" class="success_message py-3 px-1 my-2 text-center">{{message}}</h6>
@@ -98,17 +96,22 @@
 
 			{% endif %}
 			{% endfor %} {% endcomment %}
-            {{form.as_p}}
-        
-       
-
-
-
+        {% comment %} {{form.as_p}} {% endcomment %}
+            {% comment %} <input type="text" name="username" placeholder="Enter your username">
+            <input type="password" name="password" placeholder="Enter your password"> 
+            <input type="email" name="email" placeholder="Enter your email">
+            <input type="text" name="full_name" placeholder="Enter your full name">
+            <input type="text" name="address" placeholder="Enter your address">
+            <input type="number" name="contact" placeholder="Enter your contact no."> {% endcomment %}
 
 
 
         <button class="button">Register</button>
-     
+        {% if error %}
+
+        <li style="color:red;">{{errors}}</li>
+  
+        {% endif %}
     </form>
     
     <div class="signup">

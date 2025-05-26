@@ -1,0 +1,65 @@
+
+{% extends 'dashboard/base.html' %}
+
+{% block main %}
+                <!-- Page Heading -->
+               
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Brand</h6>
+                        <div class="float-right">
+                            <a href="{% url 'dashboard:brands-create' %}" class = "btn btn-primary">
+                                <i class="fa fa-plus"></i>&nbsp; Add Brand
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Brand Code</th>
+                                        <th>Brand Name</th>
+                                        <th>Slug</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ object.brand_code }}</td>
+                                        <td>{{ object.name }}</td>
+                                        <td>{{ object.slug }}</td>
+                                        
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'dashboard:brands-update' object.pk %}" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                   </a> 
+                                               {% if not object.non_deletetable %}
+                                               <form action="{% url 'dashboard:brands-delete' object.pk %}" method="post">
+
+                                                
+                                                {% csrf_token %}
+                                                <button class="btn btn-danger btn-sm delete-link ml-2" data-tooltip="tooltip" title="Delete">
+                                                    <e class="far fa-trash-alt"></e>
+                                                </button>
+                                               </form>
+                                               {% endif %}
+                                            </div>
+                                           </td>
+                                       
+
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+{% endblock main %}

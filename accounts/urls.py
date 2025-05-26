@@ -17,17 +17,22 @@ urlpatterns = [
    # path('logout', views.customerSignUpView(), name = 'logout')
 
 
-   path('registerform/', views.CustomerRegistrationView.as_view(),name="customerregistration"),
-   path('login/',CustomerLoginView.as_view(),name="customerlogin"),
-   # path('accounts/', include('accounts.urls', namespace='accounts')),
+   path("register/",
+         CustomerRegistrationView.as_view(), name="customerregistration"),
+
+    path("logout/", CustomerLogoutView.as_view(), name="customerlogout"),
+    path("login/", CustomerLoginView.as_view(), name="customerlogin"), 
 
 
    # path('login',views.AdminLoginViews.as_view(),name='login'),
-   path('logout',views.AdminLogoutViews.as_view(),name='logout'),
+   path('adminlogout',views.AdminLogoutViews.as_view(),name='adminlogout'),
 
 
    # path("registerform/",views.registerform, name="registerform"),
    # path("loginform/",views.loginform, name="loginform"),
-   path("adminloginform/",views.AdminLoginViews.as_view(), name="adminloginform"),
-   path('logout/', views.logoutuser),
+   path("adminloginform/",AdminLoginViews.as_view(), name="adminloginform"),
+   # path('logout/', views.logoutuser),
+
+
+
 ]

@@ -1,0 +1,120 @@
+{% extends 'dashboard/base.html' %}
+{% load humanize %}
+
+{% block title %}Order Detail{% endblock  %}
+
+{% block main %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h3>Order Detail</h3>
+            <hr>
+            <p><span class="font-weight-bold">Order ID: </span> #ORDER_{{ord_obj.id}}</p>
+            <p><span class="font-weight-bold">Order Status: </span> {{ord_obj.order_status}}</p>
+            <p><span class="font-weight-bold">Order On: </span> {{ord_obj.created_at}}({{ord_obj.created_at|timesince}} ago)</p>
+            <p><span class="font-weight-bold">Customer Information: </span> By {{ord_obj.ordered_by}}, {{ord_obj.mobile}}</p>
+            <p><span class="font-weight-bold">Shipping Address: </span> By {{ord_obj.shipping_address}} ({{ord_obj.email}})</p>
+            <p><span class="font-weight-bold">Payment Information: </span>  Using {{ord_obj.payment_method}} ({% if ord_obj.payment_completed %}Payment Completed{% else %}Not Paid{% endif %})</p>
+            <h4>Ordered Items</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        {% comment %} <th>Image</th> {% endcomment %}
+                        <th>Item</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {% for cp in ord_obj.cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        {% comment %} <td>{{cp.product.image.url}}</td> {% endcomment %}
+                        <td><a target="_blank"
+                                href="{% url 'home:productDetails' cp.product.id %}">{{cp.product.name}}({{cp.product.id}})</a>
+                        </td>
+                        <td>{{cp.rate}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal}}</td>
+                        <td>Total: Rs {{ord_obj.total|intcomma}}/-</td>
+                    </tr>
+                    
+                    {% endfor %}
+                    {% comment %} <th>Total: Rs {{ord_obj.total|intcomma}}/-</th> {% endcomment %}
+                    {% comment %}         
+                    <tr>
+                        <th colspan="4" class="text-right">Total: Rs {{ord_obj.total|intcomma}}/-</th>
+
+                    </tr> {% endcomment %}
+                </tbody>
+              
+                
+            </table>
+            <form action="{% url 'dashboard:adminorderstatuschange' ord_obj.id %}" method="POST">
+                {% csrf_token %}
+                <select name="status">
+                    {% for i, j in allstatus %}
+                    <option value="{{i}}" {% if i == ord_obj.order_status %}selected{% endif %}>{{j}}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-success">Change</button>
+                <button class="btn btn-primary" onclick="generateReport()"> <i class="fas fa-file"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function generateReport() {
+        var table = document.querySelector(".table");
+        var rows = Array.from(table.getElementsByTagName("tr"));
+        var reportTable = document.createElement("table");
+        var reportHeader = document.createElement("thead");
+        var reportBody = document.createElement("tbody");
+      
+        // Create table header
+        var headerRow = document.createElement("tr");
+      
+        var headers = rows[0].getElementsByTagName("th");
+     for (var h = 0; h < headers.length; h++) { // -1 to exclude the action column
+          var headerCell = document.createElement("th");
+          headerCell.innerText = headers[h].innerText;
+          headerRow.appendChild(headerCell);
+        }
+      
+        reportHeader.appendChild(headerRow);
+        reportTable.appendChild(reportHeader);
+      
+        // Create table body
+        for (var i = 1; i < rows.length-1; i++) { // iterate until rows.length - 1 to skip the last row
+          var row = rows[i];
+          var displayStyle = row.style.display;
+      
+          // proceeding only if the row is displayed
+          if (displayStyle !== "none") {
+            var columns = row.getElementsByTagName("td");
+      
+            var bodyRow = document.createElement("tr");
+            for (var j = 0; j < columns.length; j++) { // -1 to exclude the action column
+              var bodyCell = document.createElement("td");
+              bodyCell.innerText = columns[j].innerText;
+              bodyRow.appendChild(bodyCell);
+            }
+      
+            reportBody.appendChild(bodyRow);
+          }
+        }
+      
+        reportTable.appendChild(reportBody);
+      
+        // Generate file with report content
+        var reportContent = "<html><head><title>Order Report</title></head><body>" + reportTable.outerHTML + "</body></html>";
+        var blob = new Blob([reportContent], {type: "text/html;charset=utf-8"});
+        saveAs(blob, "dashboard/report_template.html");
+      }
+      </script>
+
+
+{% endblock %}

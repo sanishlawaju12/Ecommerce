@@ -1,50 +1,21 @@
 {% extends 'home/base.html' %}
 
-{% block title %} Customer Login{%endblock%}
+{% block title %}Customer Login{% endblock %}
 
-{% block main %}
+{% block form %}
 <style>
-    .errorlist{
+    .errorlist {
         color: red;
     }
 </style>
-{% comment %}
-
-<div class="form-container">
-    <div class="form-wrapper">
-            <div class="form-title"><span>Login Form</span></div>
-
-            <form action="" method="POST" class="main-form">
-                <div class="form-row">
-                    <i class ="fas fa-user"></i> 
-                {% csrf_token %}
-                
-                    <input type="text" name="username" placeholder="username">
-                    <br>
-                    <input type="password" name="password" placeholder="password">
-                    <br>
-                <div class="line-design">{{form.as_p}}</div> 
-                <button class="btn btn-primary">Login as a customer</button>
-                {% if error %}
-
-                <li style="color:red;">{{error}}</li>
-
-                {% endif %}
-            </form>
-        </div>       
-     
-</div>
-{% endcomment %}
-
-  <div class="container-form">
+<div class="container-form">
     <input type="checkbox" id="check">
     <div class="login form">
       <header>Login Form</header>
       <form action="" method="POST">
         {% csrf_token %}
-        {{form.as_p}}
-        {% comment %} <input type="text" name="username" placeholder="Enter your username">
-        <input type="password" name="password" placeholder="Enter your password"> {% endcomment %}
+        <input type="text" name="username" placeholder="Enter your username">
+        <input type="password" name="password" placeholder="Enter your password">
        <button class="button">Login</button>
        {% if error %}
 
@@ -52,16 +23,12 @@
  
        {% endif %}
     </form>
-     <div class="signup">
-        <span class="signup">Don't have an account?
-         <label for="check"><a href="/accounts/registerform">Register</a></label>
-        </span>
-    </div>
+    <span class="signup">Don't have an account?
+        <label for="check"><a href="{% url 'accounts:customerregistration' %}">Register here</a></label>
+       </span>
     
      
     </div>
  
   </div>
-
-
-{%endblock%}
+{% endblock %}

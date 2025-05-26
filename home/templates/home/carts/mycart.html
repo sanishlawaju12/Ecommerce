@@ -3,104 +3,119 @@
 {% block title %} My Cart{% endblock%}
 
 {% block main%}
-<!--
-<div class="container">
-    <div class="panel panel-primary">
-      
-      <table class="table table-hover" id="dev-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            {% comment %} <th>Size</th> {% endcomment %}
-            <th>Price</th>
-            <th>Description</th>
-            <th>Remove From Cart</th>
-  
-          </tr>
-        </thead>
-        {% for p in products %}
-    {% if p %}
-  
-        <tr>
-          <td> {{p.name}}</td>
-          <td> <img src="{{p.image.url}}" alt="Profile Pic" height="40px" width="40px" /></td>
-          {% comment %} <td> {{p.size_variant}}</td> {% endcomment %}
-          <td>{{p.price}}</td>
-          <td>{{p.description}}</td>
 
-          <td><a href="{% url 'home:remove-from-cart' p.id  %}"><i class="bx bx-trash"></i></a></td>
-  
-        </tr>
-        {%else%}
-        <br><br><br>
-        <h1>no products</h1>
-        {% endif %}
-        {% endfor %}
-      </table>
-    </div>
-  </div>
-  <br><br><br>
-  <div style="text-align: center;  ">
-    <div class="total" style=" height:50px; ">
-      Total = {{total}}</div>
-    {% comment %} <a href=""><button class="button" ><span>Check out </span></button></a> {% endcomment %}
-  </div>
-  
-  
-  <br><br><br><br><br> -->
+<section class="h-100 gradient-custom py-2" style="margin-top:105px;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center my-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Cart</h5>
+          </div>
+          <div class="card-body">
+            {% for cp in cart.cartproduct_set.all %}
+            <!-- Single item -->
+            <div class="row">
+              
+              <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                <!-- Image -->
+                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                  <img src="{{cp.product.image.url}}"
+                    class="w-100" alt="Blue Jeans Jacket" />
+                  <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                  </a>
+                </div>
+                <!-- Image -->
+              </div>
 
+              <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                <!-- Data -->
+                <p><strong>{{cp.product.name}}</strong></p>
+                <p>Price: {{cp.rate}}</p>
+                <a href="{% url 'home:managecart' cp.id %}?action=rmv"><button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                  title="Remove item">
+                  <i class="fas fa-trash"></i>
+              </button></a>
+                <!-- Data -->
+              </div>
 
+              <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <!-- Quantity -->
+                <div class="d-flex mb-4" style="max-width: 300px">
+                  <a href="{% url 'home:managecart' cp.id %}?action=dcr"><button class="btn btn-primary px-3 me-2">
+                    <i class="fas fa-minus"></i>
+                  </button></a>
 
+                  <div class="form-outline">
+                    <span class="quantity text-center">{{cp.quantity}}</span>
+                  </div>
 
-  
-  <div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h4>Items in my cart</h4><hr>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Product</th>
-                        <th>Rate</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cp in cart.cartproduct_set.all %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{cp.product.name}}</td>
-                        <td>{{cp.rate}}</td>
-                        <td>{{cp.quantity}}</td>
-                        <td>{{cp.subtotal}}</td>
-                        <td>
-                            <a href="{% url 'home:managecart' cp.id %}?action=inc" class="btn btn-primary"> + </a>
-                            <a href="{% url 'home:managecart' cp.id %}?action=dcr" class="btn btn-warning"> - </a>
-                            <a href="{% url 'home:managecart' cp.id %}?action=rmv" class="btn btn-danger"> x </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    <tr>
-                        <th colspan="4" class="text-right">Total</th>
-                        <th>Rs. {{cart.total}}</th>
-                        {% if cart.cartproduct_set.all %}
-                        <th><a href="{% url 'home:emptycart' %}">Empty Cart</a></th>
-                        {% endif %} 
-                    </tr>
+                  <a href="{% url 'home:managecart' cp.id %}?action=inc"><button class="btn btn-primary px-3 ms-2">
+                    <i class="fas fa-plus"></i>
+                  </button></a>
+                </div>
+                <!-- Quantity -->
+
+                <!-- Price -->
+                <p class="text-start text-xl-center text-success">
+                  <strong>Subtotal: {{cp.subtotal}}</strong>
+                </p>
+                <!-- Price -->
+              </div>
+            </div>
+            <!-- Single item -->
+
+            <hr class="my-4" />
+            
+            {%endfor%}
+            <div class="p-2">
+              <h6 class="mb-0"><a href="{% url 'home:allproduct' %}" class="text-body"><i
+                    class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
                     {% if cart.cartproduct_set.all %}
-                    <tr>
-                        <th><a class="btn btn-info" href="{% url 'home:checkout' %}"> Checkout </a></th>
-                    </tr>
+                    <a href="{% url 'home:emptycart' %}">
+                    <button type="button" class="float-end btn btn-primary btn-lg btn-block">
+                      Empty Cart
+                    </button></a>
                     {% endif %}
-                </tbody>
-            </table>
+            </div>
+           
+              
+            
+          </div>
         </div>
+      </div>
+
+
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Summary</h5>
+          </div>
+          <div class="card-body">
+            
+            <ul class="list-group list-group-flush">
+              
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>Total amount</strong>
+                </div>
+                <span><strong>Rs {{cart.total}}</strong></span>
+              </li>
+            </ul>
+            {% if cart.cartproduct_set.all %}
+              <a href="{% url 'home:checkout' %}">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+              Go to checkout
+            </button></a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 
 
 

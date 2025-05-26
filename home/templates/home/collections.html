@@ -1,49 +1,72 @@
-{% extends 'home/base.html' %}
+{% extends 'home/base.html' %} 
 
 {% block main %}
 
-    
-<!-- Categories Section -->
-<section class="section category">
-   <div class="cat-center">
-    {% for category in category %}
-     <div class="cat">
-      
-      <a href="/category/{{category.id}}">
-       <img src="{{category.image.url}}" alt="" />
-       <div>
-         <p>{{category.title}}</p>
-       </div>
-      </a>
-      
-     </div>
-     {% endfor %}
-     
-   </div>
- </section>
 
-
-
-{% comment %} 
- <div class= "container">
-    <div class= "row">
-        <div class= "col-md-12">
-            <h1>collections</h1>
-                <div class= "row">
-                        {% for product in category %}
-                            <div class= "col-md-4">
-                                <div class= "card">
-                                    <div class= "card-body">
-                                        <div class= "category-image">
-                                            <img src="{{ product.image.url }}" alt="category image">
-                                        </div>
-                                    <h4>{{ category.title }} </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-            
+  <div class="container py-5" style="margin-top:105px;">
+    <!-- row -->
+    <div class = "title text-center">
+        <h2 class = "position-relative d-inline-block">Our Collection</h2>
+    </div>
+    <div class="row mb-5 cstm-height-card">
+      {% for category in category %}
+        <div class="col-md-4 p-4 shadow-sm">
+            <div class="card text-center p-2">
+                <a href="/collections/{{category.slug}}"><img src="{{category.image.url}}" class="card-img-top" alt="..."></a>
+                <div class="card-body p-3">
+                    <a href="/collections/{{category.slug}}"><p class="card-tittle p-2">{{category.title}}</p></a>
+                    <p class="card-price p-2 ">{{category.slug}}</p> 
+                    {% comment %} <a href = "#" class = "btn btn-primary mt-3">Mens</a> {% endcomment %}
+                </div>
+            </div>    
         </div>
- </div> {% endcomment %}
+        {%endfor%}
+    </div>
+</div>
+
+  <!-- about us -->
+  <section id = "about" class = "py-5">
+    <div class = "container">
+        <div class = "row gy-lg-5 align-items-center">
+            <div class = "col-lg-6 order-lg-1 text-center text-lg-start">
+                <div class = "title pt-3 pb-5">
+                    <h2 class = "position-relative d-inline-block ms-4">About Us</h2>
+                </div>
+                <p class = "lead text-muted">Welcome to our shop! We are passionate about providing high-quality clothing and exceptional customer service.</p>
+                <p>Our mission is to offer the latest fashion trends at affordable prices, making it easier for you to express your unique style. We value your satisfaction and strive to meet your clothing needs.</p>
+            </div>
+            <div class = "col-lg-6 order-lg-0">
+                <img src = "/static/home/images/lvdpasal.jpg" alt = "" class = "img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end of about us -->
+
+
+<!-- start of contact us page -->
+<section id = "contact" class = "py-5">
+<div class="container">
+  <h1>Contact Us</h1>
+  <p>
+    If you have any inquiries, please feel free to contact us using the information below:
+  </p>
+  <ul>
+    <li>Email: Sushiltamang215@gmail.com</li>
+    <li>Phone: +977 9843043102</li>
+    <li>Address: Tourism Market, Suryabinayak, Bhaktapur</li>
+  </ul>
+  <p>
+    You can also reach out to us through our social media channels:
+  </p>
+  <ul>
+    <li>Facebook: <a href="https://www.facebook.com/profile.php?id=100084033919095">LVD Splash, 365 clothing store</a></li>
+  </ul>
+</div>
+</section>
+
+<!-- end of contact us page -->
+
+
+
 {% endblock %}

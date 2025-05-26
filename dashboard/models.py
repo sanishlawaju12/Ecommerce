@@ -1,11 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 # Create your models here.
 
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.user.username
+
+
 #category models
 class Category(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,unique=True)
     slug = models.SlugField()
     image = models.ImageField(upload_to= 'categories/',null=True)
     status = models.BooleanField(default=False, help_text="0_default, 1=Hidden")
@@ -21,6 +30,7 @@ class Category(models.Model):
 
 #Brand Models
 class Brand(models.Model):
+    brand_code = models.CharField(max_length=200,null=True)
     name = models.CharField(max_length=200)
     slug =models.SlugField()
 
@@ -43,12 +53,12 @@ class SizeVariant(models.Model):
 #Product models
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products' ,null=True)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE,related_name='products' ,null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE,related_name='products',blank=True,null=True)
     name = models.CharField(max_length=200)
-    size_variant = models.ManyToManyField(SizeVariant,blank=True)
     image = models.ImageField(upload_to = 'products/')
+    # size_variant = models.ManyToManyField(SizeVariant, blank=True)
     price = models.PositiveIntegerField()
-    slug = models.SlugField( null=True)
+    slug = models.SlugField()
     description = models.CharField(max_length=300)
     is_latest = models.BooleanField(default=False)
 
@@ -77,18 +87,21 @@ class ProductImage(models.Model):
     
 #Customer models
 class Customer(models.Model):
-    user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
-    username = models.CharField(null=True,max_length=200)
-    email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=200, null=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    # username = models.CharField(null=True,max_length=200)
+    email_regex = RegexValidator(regex=  r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", message="please provide valid email address")
+    email = models.EmailField(validators=[email_regex],unique=True)
+    fn_regex = RegexValidator(regex=r"^[A-Za-z\s]+$", message="please provide valid Name")
+    full_name = models.CharField(validators=[fn_regex],max_length=200, null=True)
     # profile_pic= models.ImageField(upload_to='profile_pic/CustomerProfilePic/',null=True,blank=True)
     address = models.CharField(max_length=40)
-    contact = models.PositiveBigIntegerField(null=True)
+    contact_regex = RegexValidator( regex = r"^98\d{8}$",message = "phone number should starts with 98 and have 10 digits")
+    contact = models.CharField(max_length=10,validators=[contact_regex],null=True)
     created_date = models.DateTimeField(auto_now_add=True,null=True)
     
     
     def __str__(self):
-        return self.username
+        return self.full_name
     
 
 
@@ -145,17 +158,20 @@ ORDER_STATUS = (
 
 METHOD = (
     ("Cash On Delivery", "Cash On Delivery"),
-    ("Khalti", "Khalti"),
+    # ("Khalti", "Khalti"),
     ("Esewa", "Esewa"),
 )
 
 
 class Order(models.Model):
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
-    ordered_by = models.CharField(max_length=200)
+    ob_regex = RegexValidator(regex=r"^[A-Za-z\s]+$", message="please provide valid Name")
+    ordered_by = models.CharField(validators=[ob_regex],max_length=200)
     shipping_address = models.CharField(max_length=200)
-    mobile = models.CharField(max_length=10)
-    email = models.EmailField(null=True, blank=True)
+    mobile_regex = RegexValidator( regex = r"^98\d{8}$",message = "phone number should exactly be in 10 digits and starts with 98")
+    mobile = models.CharField(max_length=10, validators=[mobile_regex])
+    email_regex = RegexValidator(regex=  r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", message="please provide valid email address")
+    email = models.EmailField(validators=[email_regex],null=True, blank=True)
     subtotal = models.PositiveIntegerField()
     # discount = models.PositiveIntegerField()
     total = models.PositiveIntegerField()
@@ -168,3 +184,11 @@ class Order(models.Model):
 
     def __str__(self):
         return "Order: " + str(self.id)
+    
+
+# class Sale(models.Model):
+#     date = models.DateTimeField()
+#     amount = models.DecimalField(max_digits=10,decimal_places=2)
+
+#     def __str__(self):
+#         return f"Sale on {self.date} - ${self.amount}"

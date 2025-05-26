@@ -1,15 +1,79 @@
+from django.contrib import messages
 from random import sample
+from django.shortcuts import redirect, render
+from django.views import View
 from django.views.generic import TemplateView,ListView,CreateView,UpdateView,DeleteView,DetailView
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
+
 from . models import *
 from . forms import *
 
+from django.contrib import admin
+# from .models import Sale
 
-class DashboardHomeView(LoginRequiredMixin, TemplateView):
+class DashboardRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
+            pass
+        else:
+            messages.success(self.request,"You must login as admin to enter dashboard") 
+            return redirect("/accounts/adminloginform/")
+            
+        return super().dispatch(request, *args, **kwargs)
+
+class DashboardHomeView(DashboardRequiredMixin, TemplateView):
     template_name= "dashboard/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["pendingorders"] = Order.objects.filter(
+            order_status="Order Received").order_by("-id")
+        return context
+    
+class DashboardOrderDetailView(DashboardRequiredMixin, DetailView):
+    template_name="dashboard/adminorderdetail.html"
+    model = Order
+    context_object_name = "ord_obj"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["allstatus"] = ORDER_STATUS
+        return context
+
+
+class DashboardOrderListView(DashboardRequiredMixin, ListView):
+    template_name = "dashboard/adminorderlist.html"
+    queryset = Order.objects.all().order_by("-id")
+    context_object_name = "allorders"
+
+
+class DashboardOrderStatuChangeView(DashboardRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        order_id = self.kwargs["pk"]
+        order_obj = Order.objects.get(id=order_id)
+        new_status = request.POST.get("status")
+        order_obj.order_status = new_status
+        order_obj.save()
+        return redirect(reverse_lazy("dashboard:adminorderdetail", kwargs={"pk": order_id}))
+    
+class DashboardOrderDeleteView(DashboardRequiredMixin, DeleteView):
+    model = Order
+    success_url = reverse_lazy('dashboard:adminorderlist')
+
+
+def customer_order_report(request):
+    ordered_by = Order.objects.filter(ordered_by=ordered_by)
+    orders = Order.objects.filter(order_id=orders)
+    return render(request, 'dashboard/report_template.html', {'ordered_by': ordered_by, 'orders': orders})
+
+    
+
+
+
 
 #Category view
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -36,6 +100,33 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'dashboard/categories/form.html'
     model = Category
 
+#Brand view
+class BrandListView(LoginRequiredMixin, ListView):
+    template_name = 'dashboard/brands/list.html'
+    model = Brand
+
+class BrandCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'dashboard/brands/form.html'
+    form_class = BrandForm
+    success_url = reverse_lazy('dashboard:brands-list')
+
+
+class BrandUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'dashboard/brands/form.html'
+    form_class = BrandForm
+    model = Brand
+    success_url = reverse_lazy('dashboard:brands-list')
+
+class BrandDeleteView(LoginRequiredMixin, DeleteView):
+    model = Brand
+    success_url = reverse_lazy('dashboard:brands-list')
+
+class BrandDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'dashboard/brands/form.html'
+    model = Brand
+
+
+
 #Product view
 class ProductListView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/products/list.html'
@@ -53,6 +144,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     model = Product
     success_url = reverse_lazy('dashboard:products-list')
+    
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
@@ -118,27 +210,39 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
 
 
-#Cart View
-class CartProductListView(LoginRequiredMixin, ListView):
-    template_name = 'dashboard/carts/list.html'
-    model = CartProduct
-
-class CartProductCreateView(LoginRequiredMixin, CreateView):
-    template_name = 'dashboard/carts/form.html'
-    form_class = CartForm
-    success_url = reverse_lazy('dashboard:carts-list')
 
 
-class CartProductUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'dashboard/carts/form.html'
-    form_class = CartForm
-    model = CartProduct
-    success_url = reverse_lazy('dashboard:carts-list')
+# #Cart View
+# class CartProductListView(LoginRequiredMixin, ListView):
+#     template_name = 'dashboard/carts/list.html'
+#     model = CartProduct
 
-class CartProductDeleteView(LoginRequiredMixin, DeleteView):
-    model = CartProduct
-    success_url = reverse_lazy('dashboard:carts-list')
+# class CartProductCreateView(LoginRequiredMixin, CreateView):
+#     template_name = 'dashboard/carts/form.html'
+#     form_class = CartForm
+#     success_url = reverse_lazy('dashboard:carts-list')
 
-class CartProductDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'dashboard/carts/form.html'
-    model = CartProduct
+
+# class CartProductUpdateView(LoginRequiredMixin, UpdateView):
+#     template_name = 'dashboard/carts/form.html'
+#     form_class = CartForm
+#     model = CartProduct
+#     success_url = reverse_lazy('dashboard:carts-list')
+    
+
+# class CartProductDeleteView(LoginRequiredMixin, DeleteView):
+#     model = CartProduct
+#     success_url = reverse_lazy('dashboard:carts-list')
+
+# class CartProductDetailView(LoginRequiredMixin, DetailView):
+#     template_name = 'dashboard/carts/form.html'
+#     model = CartProduct
+
+# def sales_history(request):
+#     sales =Sale.objects.all().order_by('-date')
+#     context = {
+#         'sales': sales
+#     }
+#     return render(request, 'dashboard/sales/sales_history.html' , context)
+
+
