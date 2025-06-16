@@ -60,6 +60,8 @@ urlpatterns =[
 
     path('admin-order-<int:pk>-ordered_by/order_report/', views.customer_order_report, name='customer-order-report'),
 
+    path('analytics/', views.DashboardAnalyticsView.as_view(), name='analytics'),
+
 
 #     #Cart
 #     path('carts',views.CartProductListView.as_view(), name = 'carts-list'),
