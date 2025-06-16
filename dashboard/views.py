@@ -7,6 +7,11 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.db.models import Sum, Count, Avg
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models.functions import TruncDate
+
 
 
 from . models import *
@@ -245,4 +250,32 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 #     }
 #     return render(request, 'dashboard/sales/sales_history.html' , context)
 
+
+class DashboardAnalyticsView(DashboardRequiredMixin, TemplateView):
+    template_name = "dashboard/analytics.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["total_sales"] = Order.objects.aggregate(Sum('total'))['total__sum'] or 0
+        context["total_orders"] = Order.objects.count()
+        context["avg_order_value"] = Order.objects.aggregate(Avg('total'))['total__avg'] or 0
+        context["total_customers"] = Customer.objects.count()
+
+        context["top_products"] = (
+            Product.objects.annotate(order_count=Count('cartproduct')).order_by('-order_count')[:5]
+        )
+
+        # Orders by date
+        last_30_days = timezone.now() - timedelta(days=30)
+        orders_by_date = (
+            Order.objects.filter(created_at__gte=last_30_days)
+            .annotate(date=TruncDate('created_at'))
+            .values('date')
+            .annotate(total=Sum('total'), count=Count('id'))
+            .order_by('date')
+        )
+        context["orders_by_date"] = orders_by_date
+
+        return context
 
